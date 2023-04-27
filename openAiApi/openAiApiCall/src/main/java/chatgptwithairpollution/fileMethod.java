@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 public class fileMethod {
 
 	// 파일 리스트 출력
-    public int file_list(String path) {
+    	public int file_list(String path) {
         File dir = new File(path);
         File[] fileList = dir.listFiles();
 
