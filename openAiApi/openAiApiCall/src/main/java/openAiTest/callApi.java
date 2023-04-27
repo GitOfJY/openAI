@@ -32,39 +32,39 @@ public class callApi {
 		
 		// 파일 대화
 		if (input == 1) {	
-            String readFilePath = "C:\\apiTestTxt\\";    
-            int file_list_length = fm.file_list(readFilePath);
-            
-            System.out.println("해당하는 파일 번호를 입력하세요.");
-            int fileNum = sc.nextInt();
-            
-            while (fileNum > file_list_length ||  fileNum < 0) {
-                 System.out.println("( 범위에 벗어나는 번호 입니다. )\n\n");
-                 System.out.println("해당하는 파일 번호를 입력하세요.");
-                 fileNum = sc.nextInt();
-            }
-            
-            String fileName = fm.find_file_name(readFilePath, fileNum);
+			String readFilePath = "C:\\apiTestTxt\\";    
+		    	int file_list_length = fm.file_list(readFilePath);
 
-            text = fm.read_file(readFilePath, fileName);
-            System.out.println("사용자 : "+text);
-            bf.write("\n사용자 : "+text+"\n");
+		    	System.out.println("해당하는 파일 번호를 입력하세요.");
+		    	int fileNum = sc.nextInt();
+
+			while (fileNum > file_list_length ||  fileNum < 0) {
+				System.out.println("( 범위에 벗어나는 번호 입니다. )\n\n");
+				System.out.println("해당하는 파일 번호를 입력하세요.");
+				fileNum = sc.nextInt();
+			}
             
-            if (text.equals("")) {
-            	System.out.println("파일의 내용이 비어있습니다.");
-            	bf.write("파일의 내용이 비어있습니다.\n");
-            } else {
-            	answer = getApiAnswer(client, text);
-            	System.out.println("api : "+answer);
-            	bf.write("\napi : "+answer+"\n");
-            }
+		    	String fileName = fm.find_file_name(readFilePath, fileNum);
+
+		    	text = fm.read_file(readFilePath, fileName);
+		    	System.out.println("사용자 : "+text);
+		    	bf.write("\n사용자 : "+text+"\n");
+
+		    	if (text.equals("")) {
+				System.out.println("파일의 내용이 비어있습니다.");
+				bf.write("파일의 내용이 비어있습니다.\n");
+		    	} else {
+				answer = getApiAnswer(client, text);
+				System.out.println("api : "+answer);
+				bf.write("\napi : "+answer+"\n");
+		    	}
 		
-        // 사용자 대화    
+        	// 사용자 대화    
 		} else if (input == 2) {
 			
 			int cnt = 0;
 			
-	        while (true) {
+	        	while (true) {
 	        	
 				System.out.println("사용자 : ");
 				text = sc.nextLine();
@@ -87,10 +87,10 @@ public class callApi {
 				
 				cnt ++;
 				
-	        }
-        
-        } //while
-        		
+	        	} // while        
+        	
+		} // if
+		
 	} // callOpenAi
 	
 	
@@ -101,68 +101,68 @@ public class callApi {
 		JSONObject data = new JSONObject();
 		
 		JSONParser parser = new JSONParser();
-        JSONObject jObject;            
-        JSONArray jArray;   
-        JSONObject jobj;
-        String apiAnswer;
+        	JSONObject jObject;            
+        	JSONArray jArray;   
+       		JSONObject jobj;
+        	String apiAnswer;
         		
-        try {
-    		
-    		inputMessage.put("role", "user");
-	        inputMessage.put("content", text);
-	        reqArry.add(inputMessage);
-                            
-            data.put("model", "gpt-3.5-turbo");
-            data.put("messages", reqArry);
-            data.put("max_tokens", 4000);
-            data.put("temperature", 0.0); 
-            
-            // httpPost
-            postRequest = new HttpPost(requestURL);
-        	postRequest.setHeader("Connection", "keep-alive");
-            postRequest.setHeader("Content-Type", "application/json");
-            postRequest.addHeader("Authorization", "Bearer 인증키");		
-            	
-            postRequest.setEntity(new StringEntity(data.toString(), "UTF-8"));
-            HttpResponse response = client.execute(postRequest);   
-            
-            if (response.getStatusLine().getStatusCode() == 200) {
-                
-            	ResponseHandler<String> handler = new BasicResponseHandler();
-                String body = handler.handleResponse(response);
-                
-                jObject = (JSONObject) parser.parse(body);
-                jArray = (JSONArray) jObject.get("choices");		            
-                jobj = (JSONObject) ((JSONObject)jArray.get(0)).get("message"); 	
-                apiAnswer = (String) jobj.get("content");
-                
-                System.out.println("************************");
-                System.out.println(jArray.toString());
-                System.out.println("************************");
-            
-                return apiAnswer;   
-                
-            } else {
-            	
-            	String body = EntityUtils.toString(response.getEntity());
-            	System.out.println("+++++++++++++bad requeset body 확인+++++++++++++");
-            	System.out.println(response.getStatusLine().getStatusCode());
-            	System.out.println(body);
-            	System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++");
+		try {
 
-            	// 토큰 초과로 예외 발생했을 때, 초기화
-            	reqArry.removeAll(reqArry);
-            	System.out.println("토큰 소진으로 대화내용 초기화");
-            	System.out.println("다시 입력해 주세요.");
-            	
-            } // if-else        	
-        	
+			inputMessage.put("role", "user");
+			inputMessage.put("content", text);
+			reqArry.add(inputMessage);
+
+			data.put("model", "gpt-3.5-turbo");
+			data.put("messages", reqArry);
+			data.put("max_tokens", 4000);
+			data.put("temperature", 0.0); 
+
+			// httpPost
+			postRequest = new HttpPost(requestURL);
+			postRequest.setHeader("Connection", "keep-alive");
+			postRequest.setHeader("Content-Type", "application/json");
+			postRequest.addHeader("Authorization", "Bearer 인증키");		
+
+			postRequest.setEntity(new StringEntity(data.toString(), "UTF-8"));
+			HttpResponse response = client.execute(postRequest);   
+
+			if (response.getStatusLine().getStatusCode() == 200) {
+
+				ResponseHandler<String> handler = new BasicResponseHandler();
+				String body = handler.handleResponse(response);
+
+				jObject = (JSONObject) parser.parse(body);
+				jArray = (JSONArray) jObject.get("choices");		            
+				jobj = (JSONObject) ((JSONObject)jArray.get(0)).get("message"); 	
+				apiAnswer = (String) jobj.get("content");
+
+				System.out.println("************************");
+				System.out.println(jArray.toString());
+				System.out.println("************************");
+
+				return apiAnswer;   
+
+			} else {
+
+				String body = EntityUtils.toString(response.getEntity());
+				System.out.println("+++++++++++++bad requeset body 확인+++++++++++++");
+				System.out.println(response.getStatusLine().getStatusCode());
+				System.out.println(body);
+				System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+				// 토큰 초과로 예외 발생했을 때, 초기화
+				reqArry.removeAll(reqArry);
+				System.out.println("토큰 소진으로 대화내용 초기화");
+				System.out.println("다시 입력해 주세요.");
+
+			} // if-else        	
+
 		} catch (Exception e) {
 			System.out.println("예외발생 - checkResponsebody");
 		}
-        
-        return "토큰 소진으로 대화내용 초기화 (다시 입력해 주세요.)";
-		
+
+		return "토큰 소진으로 대화내용 초기화 (다시 입력해 주세요.)";
+
 	} // getApiAnswer()
 
 } // callApi
