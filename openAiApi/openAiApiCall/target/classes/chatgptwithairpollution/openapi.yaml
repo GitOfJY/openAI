@@ -1,0 +1,58 @@
+openapi: 3.0.3
+info:
+  title : APITest Plugin
+  description: Plugin for managing a APITest. You can ask about air pollution.
+  version: '1.0'
+servers:
+  - url: http://localhost:8080
+paths:
+  /ArpltnStatsSvc/getCtprvnMesureLIst:
+    get:
+      operationId: getairPollutionState
+      summary: Get the information about air pollution state specified on the parameters.
+      parameters:
+        - in: query
+          name: itemCode
+          schema:
+            type: string
+          required: true
+          description: Classification of air pollution measurement items
+        - in: query
+          name: dataGubun
+          schema:
+            type: string
+          required: false
+          description: Classification of requested data by hourly or daily average     
+        - in: query
+          name: pageNo
+          schema:
+            type: number
+          required: false
+          description: page number      
+        - in: query
+          name: numOfRows
+          schema:
+            type: number
+          required: false
+          description: Number of results per page        
+        - in: query
+          name: serviceKey
+          schema:
+            type: string
+          required: true
+          description: Authentication key for using API
+      requesetBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/getairPollutionStateResquest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getairPollutionStateResponse'
+                
+            
+    

@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title : Plugin for air pollution state
+  description: Plugin for getting air pollution state. You can ask about air pollution state.
+  version: '1.0'
+servers:
+  - url: http://localhost:8080
+paths:
+  /result.do:
+    get:
+      operationId: getairPollutionState
+      summary: Get the information about air pollution state specified on the parameters.
+      parameters:
+        - in: query
+          name: returnType
+          schema:
+            type: string
+          required: false
+          description: return type after calling api
+        - in: query
+          name: pageNo
+          schema:
+            type: number
+          required: false
+          description: page number      
+        - in: query
+          name: numOfRows
+          schema:
+            type: number
+          required: false
+          description: Number of results per page
+        - in: query
+          name: sidoName
+          schema:
+            type: string
+          required: false
+          description: The name of the city you want to search for        
+        - in: query
+          name: serviceKey
+          schema:
+            type: string
+          required: true
+          description: Authentication key for using API
+        - in: query
+          name: searchCondition
+          schema:
+            type: string
+          required: true
+          description: The request data period         
+      requesetBody:
+        content:
+          "application/json":
+            schema:
+              type: string
+              #$ref: '#/components/schemas/getairPollutionStateResquest'
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: string
+                #$ref: '#/components/schemas/getairPollutionStateResponse'
